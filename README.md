@@ -68,7 +68,7 @@ Através do terminal (do VSCode ou não) rode o comando:
 Para fazer o download das dependências do projeto.
 
 ###5.Crie um banco de dados para o projeto
-
+PostgreSQL.
 ###6.Arquivo .env
 Crie um arquivo .env na raíz do projeto, em seguida, copie o conteúdo do arquivo .env.example e preencha os dados de seu ambiente nos respectivos campos.
 
