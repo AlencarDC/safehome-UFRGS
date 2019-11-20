@@ -9,12 +9,16 @@ O ambiente de desenvolvimento pode ser configurado da seguinte forma (utilizando
 
 ### 1.Instalar o NodeJS (utilizando o NVM):
 
-#####Insalar o NVM
-`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash`
+##### Insalar o NVM
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+```
 
 Adicionar as variavéis de ambiente:
 
-`gedit ~/.bashrc`
+```bash
+gedit ~/.bashrc
+```
 
 No final do arquivo aberto, adicionar e salvar:
 
@@ -25,20 +29,30 @@ No final do arquivo aberto, adicionar e salvar:
 
 No terminal:
 
-`source ~/.bashrc`
+```bash
+source ~/.bashrc
+```
 
 Por fim, para verificar a instalação:
 
-`nvm -h`
-#####Agora para instalar o NodeJS, prosseguimos:
-`nvm install 12.13.0`
-`nvm alias default 12.13.0`
+```bash 
+nvm -h
+```
+##### Agora para instalar o NodeJS, prosseguimos:
+```bash
+nvm install 12.13.0
+```
+```bash
+nvm alias default 12.13.0
+```
 
 Para verificar a instalação:
 
-`node -v`
+```bash
+node -v
+```
 
-###2.Instalar o Yarn Package Manager:
+### 2.Instalar o Yarn Package Manager:
 Os passos a seguir são para Debian/Ubuntu, para outros sistemas operacionais, por favor seguir os passos descritos [aqui](https://yarnpkg.com/pt-BR/docs/install "aqui").
 
 ```bash
@@ -46,38 +60,51 @@ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 ```
 
-`sudo apt-get update`
+```bash
+sudo apt-get update
+```
 
-`sudo apt-get install --no-install-recommends yarn`
+```bash
+sudo apt-get install --no-install-recommends yarn
+```
 
 Verifique a instalação através de:
 
-`yarn --version`
+```bash
+yarn --version
+```
 
 ### 3.Clone esse projeto
 
 Clone esse projeto através de `git clone`.
 
-###4.Acesse o projeto
+### 4.Acesse o projeto
 Abra o projeto clonado em um editor/IDE de preferência, mas é aconselhado utilizar o VSCode já que possui uma ótima integração com o TypeScript.
 
 Através do terminal (do VSCode ou não) rode o comando:
 
-`yarn`
+```bash
+yarn
+```
 
 Para fazer o download das dependências do projeto.
 
-###5.Crie um banco de dados para o projeto
+### 5.Crie um banco de dados para o projeto
 PostgreSQL.
-###6.Arquivo .env
-Crie um arquivo .env na raíz do projeto, em seguida, copie o conteúdo do arquivo .env.example e preencha os dados de seu ambiente nos respectivos campos.
+### 6.Arquivo .env
+Crie um arquivo `.env` na raíz do projeto, em seguida, copie o conteúdo do arquivo `.env.example` e preencha os dados de seu ambiente nos respectivos campos.
 
-###7.Gerar as tabelas
+### 7.Gerar as tabelas
 Gere as tabelas da aplicação automaticamente através do comando:
 
-`yarn sequelize db:migrate`
+```bash
+yarn sequelize db:migrate
+```
 
 ### 8.Iniciar o servidor
 
-Para iniciar o servidor Node, utilize `yarn dev`.
+Para iniciar o servidor Node, utilize: 
+```bash
+yarn dev
+```
 As rotas do projeto podem ser registradas e verificadas no arquivo `src/Routes.ts`.
