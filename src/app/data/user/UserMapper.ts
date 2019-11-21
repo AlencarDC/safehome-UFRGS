@@ -5,8 +5,8 @@ class UserMapper {
     if (!raw) {
       return null;
     }
-    
-    return new User(raw.name, raw.username, raw.password, raw.admin, raw.house_id, raw.id);
+
+    return new User(raw.name, raw.username, raw.password, raw.admin, raw.houseId, raw.manageLocks, raw.manageDevices, raw.id);
   }
 
   public static toPersistence(user: User): any {
@@ -15,7 +15,9 @@ class UserMapper {
       username: user.getUsername(),
       password: user.getPassword(),
       admin: user.isAdmin(),
-      house_id: user.getHouse()
+      houseId: user.getHouse(),
+      manageLocks: user.canManageLocks(),
+      manageDevices: user.canManageEletricDevices()
     }
   }
 }

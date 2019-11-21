@@ -1,3 +1,5 @@
+import { Op } from 'sequelize'
+
 import IUserDAO from './IUserDAO';
 import UserMapper from './UserMapper';
 
@@ -15,9 +17,15 @@ class UserDAO implements IUserDAO {
     return !!result === true;
   }
 
-  public async delete(user: User): Promise<any> {}
+  public async delete(user: User): Promise<boolean> {
+    const result = await UserModelSequelize.destroy({ 
+      where: { id: user.getId() } 
+    });
 
-  public async save(user: User): Promise<any> {
+    return !!result;
+  }
+
+  public async save(user: User): Promise<User> {
     const exists = await this.exists(user);
     const rawUser = UserMapper.toPersistence(user);
 
@@ -29,8 +37,22 @@ class UserDAO implements IUserDAO {
 
     return UserMapper.toDomain(dbUser);
   }
+
+  public async update(user: User): Promise<User> {
+    const dbUser = await UserModelSequelize.update(user, { 
+      where: { id: user.getId() }, 
+    });
+
+    return UserMapper.toDomain(dbUser);
+  }
   
-  public async getUserById(userId: string): Promise<User> {return null}
+  public async getUserById(userId: string): Promise<User> {
+    const result = await UserModelSequelize.findOne({
+      where: { id: userId },
+    });
+
+    return UserMapper.toDomain(result);
+  }
 
   public async getUserByUsername(username: string): Promise<User> {
     const result = await UserModelSequelize.findOne({
@@ -40,7 +62,20 @@ class UserDAO implements IUserDAO {
     return UserMapper.toDomain(result);
   }
 
-  public async findAllUsersByAdminId(adminId: string): Promise<User[]> { return null }
+  public async findAllUsersByAdminId(adminId: string): Promise<User[]> { 
+    const admin: User = await this.getUserById(adminId);
+
+    const result = await UserModelSequelize.findAll({
+      where: {
+        houseId: admin.getHouse(),
+        admin: { [Op.ne]: true },
+      } 
+    });
+
+    const users: User[] = result.map(user => UserMapper.toDomain(user));
+
+    return users;
+  }
 }
 
 export default UserDAO;

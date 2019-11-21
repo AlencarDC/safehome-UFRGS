@@ -15,9 +15,9 @@ class HouseDAO implements IHouseDAO {
     return !!result === true;
   }
 
-  public async delete(house: House): Promise<any> {}
+  public async delete(house: House): Promise<boolean> { return false; }
 
-  public async save(house: House): Promise<any> {
+  public async save(house: House): Promise<House> {
     const exists = await this.exists(house);
     const rawUser = HouseMapper.toPersistence(house);
 

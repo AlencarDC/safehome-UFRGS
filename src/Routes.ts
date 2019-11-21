@@ -36,8 +36,10 @@ class Routes {
     // Admin exlusive routes
     this.router.use(AuthMiddleware.adminPermission);
 
+    this.router.get('/users', this.usersController.index);
     this.router.post('/users', this.usersController.store);
     this.router.put('/users', this.usersController.update);
+    this.router.delete('/users', this.usersController.delete);
   }
 
   public getRoutes(): Router {

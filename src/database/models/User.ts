@@ -7,6 +7,8 @@ class User extends Model {
   public password!: string;
   public admin!: boolean;
   public houseId!: string;
+  public manageLocks!: boolean;
+  public manageDevices!: boolean;
   public readonly createdAt!: Date;
   public readonly updateAt!: Date;
 
@@ -17,6 +19,8 @@ class User extends Model {
       username: DataTypes.STRING,
       password: DataTypes.STRING,
       admin: DataTypes.BOOLEAN,
+      manageLocks: DataTypes.BOOLEAN,
+      manageDevices: DataTypes.BOOLEAN,
     },
     {
       sequelize,
@@ -26,7 +30,7 @@ class User extends Model {
   }
 
   public static associate(models: any) : void {
-    this.belongsTo(models.House, { foreignKey: "house_id"});
+    this.belongsTo(models.House, { targetKey: 'id', foreignKey: 'houseId'});
   }
 }
 

@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
 import authConfig from '../../config/auth';
 
@@ -15,35 +14,57 @@ class UsersService {
     this.userDAO = userDAO;
   }
 
-  public async addNewUser(name: string, username: string, password: string, admin:boolean, houseId: string): Promise<User> {
-    const newUser = new User(name, username, password, admin, houseId);
+  public async getUsersByAdmin(userId: string): Promise<User[]> {
+    const checkUser = await this.userDAO.getUserById(userId);
 
-    const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      username: Yup.string().required(),
-      password: Yup.string().required().min(6),
-      admin: Yup.boolean().required(),
-      houseId: Yup.string().required(),
-    });
+    if (checkUser.isAdmin()) {
+      const users: User[] = await this.userDAO.findAllUsersByAdminId(checkUser.getId());
+
+      return users;
+    }
+
+    return null;
+  }
+
+  public async addNewUser(name: string, username: string, password: string, admin:boolean, houseId: string, locks?: boolean, eletrics?: boolean): Promise<User> {
+
+    const newUser = new User(name, username, password, admin, houseId, locks, eletrics);
     
-    if (!(await schema.isValid({...newUser}))) {
+    if (newUser.validate() === false) {
       return null;
     }
-    
+
     const user = await this.userDAO.save(newUser);
 
     return user;
   }
 
-  public async signIn(username: string, password: string): Promise<any> {
-    const schema = Yup.object().shape({
-      username: Yup.string().required(),
-      password: Yup.string().required(),
-    });
+  public async updateUser(userId: string, houseId: string, canManageLocks: boolean, canManageEletricDevices: boolean): Promise<User> {
+    const user: User = await this.userDAO.getUserById(userId);
 
-    if (!(await schema.isValid({username, password}))) {
-      return null;
+    if (user.isFromHouse(houseId)) {
+      user.setManageLocksPermission(canManageLocks);
+      user.setManageLocksPermission(canManageEletricDevices);
+
+      const updatedUser = await this.userDAO.update(user);
+
+      return updatedUser;
     }
+
+    return null;
+  }
+
+  public async deleteUser(userId: string, houseId: string) {
+    const user: User = await this.userDAO.getUserById(userId);
+
+    if (user.isFromHouse(houseId)) {
+      return this.userDAO.delete(user);
+    }
+
+    return false;
+  }
+
+  public async signIn(username: string, password: string): Promise<any> {
 
     const user: User = await this.userDAO.getUserByUsername(username);
 

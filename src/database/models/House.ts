@@ -23,7 +23,7 @@ class House extends Model {
   }
 
   public static associate(models: any) : void {
-    this.hasMany(models.User, { foreignKey: 'house_id'});
+    this.hasMany(models.User, { sourceKey: 'id', foreignKey: 'houseId'});
   }
 }
 
