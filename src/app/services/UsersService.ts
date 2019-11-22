@@ -39,7 +39,7 @@ class UsersService {
     return user;
   }
 
-  public async updateUser(userId: string, houseId: string, canManageLocks: boolean, canManageEletricDevices: boolean): Promise<User> {
+  public async updatePermissions(userId: string, houseId: string, canManageLocks: boolean, canManageEletricDevices: boolean): Promise<User> {
     const user: User = await this.userDAO.getUserById(userId);
 
     if (user.isFromHouse(houseId)) {

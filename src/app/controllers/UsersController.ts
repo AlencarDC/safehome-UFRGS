@@ -33,7 +33,7 @@ class UsersController {
 
     const {userId, manageLocks, manageDevices} = req.body;
 
-    const user: User = await UsersService.updateUser(userId, req.houseId, manageLocks, manageDevices);
+    const user: User = await UsersService.updatePermissions(userId, req.houseId, manageLocks, manageDevices);
 
     if (user === null) {
       return res.status(400).json({error: 'Not able to update the user.'});

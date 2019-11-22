@@ -1,17 +1,23 @@
 import User from './User';
+import Lock from './Lock';
+import EventManager from './EventManager';
 
 class House {
   private camerasStatus: boolean;
   private alarmStatus: boolean;
   private address: string;
   private id?: string;
-  private users: User[];
+  private locks: Lock[];
+
+  public events: EventManager;
 
   public constructor(camerasStatus: boolean, alarmStatus: boolean, address: string, id?: string) {
     this.id = id ? id : null;
     this.camerasStatus = camerasStatus;
     this.alarmStatus = alarmStatus;
     this.address = address;
+
+    this.events = new EventManager();
   }
 
   public getId(): string {
@@ -30,8 +36,22 @@ class House {
     return this.address;
   }
 
-  public setUsers(users: User[]): void {
-    this.users = users;
+  public getLocks(): Lock[] {
+    return this.locks;
+  }
+
+  public addLock(lock: Lock): void {
+    this.locks.push(lock);
+  }
+
+  public removeLock(lock: Lock): void {
+    const index = this.locks.indexOf(lock);
+    this.locks.splice(index, 1);
+  }
+
+  public validate(): boolean {
+    const minAddresLength = 6;
+    return (this.address.length > minAddresLength);
   }
 }
 
