@@ -39,11 +39,11 @@ class UserDAO implements IUserDAO {
   }
 
   public async update(user: User): Promise<User> {
-    const dbUser = await UserModelSequelize.update(user, { 
-      where: { id: user.getId() }, 
+    const updatedRows = await UserModelSequelize.update(UserMapper.toPersistence(user), { 
+      where: { id: user.getId() }
     });
-
-    return UserMapper.toDomain(dbUser);
+    
+    return (updatedRows[0] > 0 ? UserMapper.toDomain(user) : null);
   }
   
   public async getUserById(userId: string): Promise<User> {
