@@ -4,6 +4,7 @@ class House extends Model {
   public id!: number;
   public camerasStatus!: boolean;
   public alarmStatus!: boolean;
+  public sprinklersStatus!: boolean;
   public address!: string;
   public readonly createdAt!: Date;
   public readonly updateAt!: Date;
@@ -13,6 +14,7 @@ class House extends Model {
     super.init.call(this, {
       camerasStatus: DataTypes.BOOLEAN,
       alarmStatus: DataTypes.BOOLEAN,
+      sprinklersStatus: DataTypes.BOOLEAN,
       address: DataTypes.STRING,
     },
     {

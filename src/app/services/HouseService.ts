@@ -19,7 +19,7 @@ class HouseService {
   }
 
   public async createNewHouse(address: string): Promise<House> {
-    const newHouse: House = new House(false, false, address);
+    const newHouse: House = new House(false, false, false, address);
 
     if (newHouse.validate() === false) {
       return null;
