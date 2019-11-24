@@ -3,11 +3,11 @@ import DAO from 'app/data/DAO';
 
 abstract class DeviceFactory {
   public abstract createDAO(): DAO<SmartDevice>;
-  public abstract createDevice(name: string, status: boolean, houseId: string, id?: string): SmartDevice;
+  public abstract createDevice(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id?: string): SmartDevice;
 
-  public async add(name: string, status: boolean, houseId: string): Promise<SmartDevice> {
+  public async add(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string): Promise<SmartDevice> {
     const dao = this.createDAO();
-    const device: SmartDevice = this.createDevice(name, status, houseId);
+    const device: SmartDevice = this.createDevice(name, status, houseId, turnOnTime, turnOffTime);
 
     if (device.validate() === false) {
       return null;
@@ -18,9 +18,9 @@ abstract class DeviceFactory {
     return dbDevice;
   }
 
-  public async update(name: string, status: boolean, houseId: string, id: string): Promise<SmartDevice> {
+  public async update(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id: string): Promise<SmartDevice> {
     const dao = this.createDAO();
-    const device: SmartDevice = this.createDevice(name, status, houseId, id);
+    const device: SmartDevice = this.createDevice(name, status, houseId, turnOnTime, turnOffTime, id);
 
     if (device.validate() === false) {
       return null;
@@ -34,10 +34,10 @@ abstract class DeviceFactory {
   public async delete(id: string): Promise<boolean> {
     const dao = this.createDAO();
 
-    const dbDevice: SmartDevice = await dao.getById(id);
+    const d: SmartDevice = await dao.getById(id);
 
-    if (dbDevice) {
-      const device: SmartDevice = this.createDevice(dbDevice.getName(), dbDevice.isON(), dbDevice.getHouse(), id);
+    if (d) {
+      const device: SmartDevice = this.createDevice(d.getName(), d.isON(), d.getHouse(), d.getTurnOnTime(), d.getTurnOffTime(), id);
 
       const deleted = await dao.delete(device);
 

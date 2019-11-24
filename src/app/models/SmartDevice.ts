@@ -3,12 +3,16 @@ abstract class SmartDevice {
   private name: string;
   private status: boolean;
   private houseId: string;
+  private turnOnTime: string;
+  private turnOffTime: string;
 
-  constructor (name: string, status: boolean, houseId: string, id?: string) {
+  constructor (name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id?: string) {
     this.id = id ? id : null;
     this.name = name;
     this.status = status;
     this.houseId = houseId;
+    this.turnOnTime = turnOnTime;
+    this.turnOffTime = turnOffTime;
   }
 
   public getId(): string {
@@ -45,6 +49,14 @@ abstract class SmartDevice {
 
   public isFromHouse(houseId: string): boolean {
     return this.houseId === houseId;
+  }
+
+  public getTurnOnTime(): string {
+    return this.turnOnTime;
+  }
+
+  public getTurnOffTime(): string {
+    return this.turnOffTime;
   }
 
   public validate(): boolean {

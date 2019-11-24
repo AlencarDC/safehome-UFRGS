@@ -7,10 +7,10 @@ class EletricDeviceController {
 
   public async store(req: Request, res: Response): Promise<Response> {
 
-    const { name, status } = req.body;
+    const { name, status, turnOnTime, turnOffTime } = req.body;
 
     const factory = new EletricDeviceFactory();
-    const eletricDevice: EletricDevice = <EletricDevice> await factory.add(name, status, req.houseId);
+    const eletricDevice: EletricDevice = <EletricDevice> await factory.add(name, status, req.houseId, turnOnTime, turnOffTime);
 
     if (eletricDevice === null) {
       return res.status(400).json({error: 'Unable to create a new eletric device.'});
@@ -21,10 +21,10 @@ class EletricDeviceController {
 
   public async update(req: Request, res: Response): Promise<Response> {
 
-    const {eletricDeviceId, name, status} = req.body;
+    const {eletricDeviceId, name, status, turnOnTime, turnOffTime} = req.body;
 
     const factory = new EletricDeviceFactory();
-    const eletricDevice: EletricDevice = <EletricDevice> await factory.update(name, status, req.houseId, eletricDeviceId);
+    const eletricDevice: EletricDevice = <EletricDevice> await factory.update(name, status, req.houseId, turnOnTime, turnOffTime, eletricDeviceId);
 
     if (eletricDevice === null) {
       return res.status(400).json({error: 'Unable to update the eletric device.'});

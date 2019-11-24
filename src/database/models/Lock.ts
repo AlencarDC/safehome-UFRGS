@@ -5,6 +5,8 @@ class Lock extends Model {
   public name!: string;
   public status!: boolean;
   public houseId!: string;
+  public turnOnTime!: string;
+  public turnOffTime!: string;
   public readonly createdAt!: Date;
   public readonly updateAt!: Date;
 
@@ -13,6 +15,8 @@ class Lock extends Model {
     super.init.call(this, {
       name: DataTypes.BOOLEAN,
       status: DataTypes.BOOLEAN,
+      turnOnTime: DataTypes.TIME,
+      turnOffTime: DataTypes.TIME,
     },
     {
       sequelize,

@@ -6,7 +6,7 @@ class LockMapper {
       return null;
     }
     
-    return new Lock(raw.name, raw.status, raw.houseId, raw.id);
+    return new Lock(raw.name, raw.status, raw.houseId, raw.turnOnTime, raw.turnOffTime, raw.id);
   }
 
   public static toPersistence(lock: Lock): any {
@@ -14,6 +14,8 @@ class LockMapper {
       name: lock.getName(),
       status: lock.isON(),
       houseId: lock.getHouse(),
+      turnOnTime: lock.getTurnOnTime(),
+      turnOffTime: lock.getTurnOffTime(),
     }
   }
 }

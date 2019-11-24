@@ -8,8 +8,8 @@ class EletricDeviceFactory extends DeviceFactory {
     return new EletricDeviceDAO();
   }
 
-  public createDevice(name: string, status: boolean, houseId: string, id?: string): EletricDevice {
-    return new EletricDevice(name, status, houseId, id);
+  public createDevice(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id?: string): EletricDevice {
+    return new EletricDevice(name, status, houseId, turnOnTime, turnOffTime, id);
   }
 }
 

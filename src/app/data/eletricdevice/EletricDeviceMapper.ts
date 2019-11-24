@@ -6,7 +6,7 @@ class EletricDeviceMapper {
       return null;
     }
     
-    return new EletricDevice(raw.name, raw.status, raw.houseId, raw.id);
+    return new EletricDevice(raw.name, raw.status, raw.houseId, raw.turnOnTime, raw.turnOffTime, raw.id);
   }
 
   public static toPersistence(eletricDevice: EletricDevice): any {
@@ -14,6 +14,8 @@ class EletricDeviceMapper {
       name: eletricDevice.getName(),
       status: eletricDevice.isON(),
       houseId: eletricDevice.getHouse(),
+      turnOnTime: eletricDevice.getTurnOnTime(),
+      turnOffTime: eletricDevice.getTurnOffTime(),
     }
   }
 }

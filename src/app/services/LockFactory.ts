@@ -8,8 +8,8 @@ class LockFactory extends DeviceFactory {
     return new LockDAO();
   }
 
-  public createDevice(name: string, status: boolean, houseId: string, id?: string): Lock {
-    return new Lock(name, status, houseId, id);
+  public createDevice(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id?: string): Lock {
+    return new Lock(name, status, houseId, turnOnTime, turnOffTime, id);
   }
 }
 
