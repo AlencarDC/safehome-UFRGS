@@ -20,7 +20,7 @@ class HouseDAO implements IHouseDAO {
   public async save(house: House): Promise<House> {
     const exists = await this.exists(house);
     const rawUser = HouseMapper.toPersistence(house);
-
+    console.log(rawUser)
     if (exists) {
       return null;
     }
