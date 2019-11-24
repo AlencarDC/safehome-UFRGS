@@ -28,8 +28,16 @@ class House {
     return this.camerasStatus;
   }
 
+  public setCamerasStatus(status: boolean): void {
+    this.camerasStatus = status;
+  }
+
   public isAlarmON(): boolean {
     return this.alarmStatus;
+  }
+
+  public setAlarmStatus(status: boolean): void {
+    this.alarmStatus = status;
   }
 
   public getAddress() {
@@ -51,7 +59,7 @@ class House {
 
   public validate(): boolean {
     const minAddresLength = 6;
-    return (this.address.length > minAddresLength);
+    return (this.address && this.address.length > minAddresLength);
   }
 }
 

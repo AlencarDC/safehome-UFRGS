@@ -24,6 +24,8 @@ class House extends Model {
 
   public static associate(models: any) : void {
     this.hasMany(models.User, { sourceKey: 'id', foreignKey: 'houseId'});
+    this.hasMany(models.Lock, { sourceKey: 'id', foreignKey: 'houseId'});
+    this.hasMany(models.EletricDevice, { sourceKey: 'id', foreignKey: 'houseId'});
   }
 }
 

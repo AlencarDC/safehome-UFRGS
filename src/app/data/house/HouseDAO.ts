@@ -28,9 +28,14 @@ class HouseDAO implements IHouseDAO {
     const dbUser = await HouseModelSequelize.create(rawUser);
 
     return HouseMapper.toDomain(dbUser);
-  }
   
-  public async getHouseById(userId: string): Promise<House> {return null}
+  }
+
+  public async update(house: House): Promise<House> { return null }
+
+  public async getById(houseId: string): Promise<House> { return null }
+  
+  public async getHouseById(houseId: string): Promise<House> {return null}
 }
 
 export default HouseDAO;

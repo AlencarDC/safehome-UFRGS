@@ -1,38 +1,16 @@
 import EventListener from './EventListener';
+import SmartDevice from './SmartDevice';
 
+class Lock extends SmartDevice implements EventListener {
 
-class Lock implements EventListener {
-  private name: string;
-  private status: boolean;
-
-  constructor (name: string, status: boolean) {
-    this.name = name;
-    this.status = status;
+  constructor (name: string, status: boolean, houseId: string, id?: string) {
+    super(name, status, houseId, id ? id : null);
   }
 
-  public turnON(): void {
-    this.status = true;
+  public update(newStatus: boolean): void {
+    newStatus ? this.turnON() : this.turnOFF();
   }
 
-  public turnOFF(): void {
-    this.status = false;
-  }
-
-  public update(newStatus: boolean) {
-    this.status = newStatus;
-  }
-
-  public isON(): boolean {
-    return this.status;
-  }
-
-  public getName(): string {
-    return this.name;
-  }
-
-  public setName(name: string): void {
-    this.name = name;
-  }
 }
 
 export default Lock;
