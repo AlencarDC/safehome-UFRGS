@@ -20,7 +20,7 @@ class HouseDAO implements IHouseDAO {
   public async save(house: House): Promise<House> {
     const exists = await this.exists(house);
     const rawUser = HouseMapper.toPersistence(house);
-
+    console.log(rawUser)
     if (exists) {
       return null;
     }
@@ -28,9 +28,14 @@ class HouseDAO implements IHouseDAO {
     const dbUser = await HouseModelSequelize.create(rawUser);
 
     return HouseMapper.toDomain(dbUser);
-  }
   
-  public async getHouseById(userId: string): Promise<House> {return null}
+  }
+
+  public async update(house: House): Promise<House> { return null }
+
+  public async getById(houseId: string): Promise<House> { return null }
+  
+  public async getHouseById(houseId: string): Promise<House> {return null}
 }
 
 export default HouseDAO;

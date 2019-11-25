@@ -45,13 +45,17 @@ class UserDAO implements IUserDAO {
     
     return (updatedRows[0] > 0 ? UserMapper.toDomain(user) : null);
   }
-  
-  public async getUserById(userId: string): Promise<User> {
+
+  public async getById(userId: string): Promise<User> {
     const result = await UserModelSequelize.findOne({
       where: { id: userId },
     });
 
     return UserMapper.toDomain(result);
+  }
+  
+  public async getUserById(userId: string): Promise<User> {
+    return await this.getById(userId);
   }
 
   public async getUserByUsername(username: string): Promise<User> {

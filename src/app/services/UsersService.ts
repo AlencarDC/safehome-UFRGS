@@ -14,6 +14,12 @@ class UsersService {
     this.userDAO = userDAO;
   }
 
+  public async getUser(userId: string): Promise<User> {
+    const user: User = await this.userDAO.getUserById(userId);
+
+    return user;
+  }
+
   public async getUsersByAdmin(userId: string): Promise<User[]> {
     const checkUser = await this.userDAO.getUserById(userId);
 
@@ -44,11 +50,11 @@ class UsersService {
 
     if (user.isFromHouse(houseId)) {
       user.setManageLocksPermission(canManageLocks);
-      user.setManageLocksPermission(canManageEletricDevices);
+      user.setManageEletricDevicesPermission(canManageEletricDevices);
+      
+      const dbUser = await this.userDAO.update(user);
 
-      const updatedUser = await this.userDAO.update(user);
-
-      return updatedUser;
+      return dbUser;
     }
 
     return null;
@@ -57,8 +63,8 @@ class UsersService {
   public async deleteUser(userId: string, houseId: string) {
     const user: User = await this.userDAO.getUserById(userId);
 
-    if (user.isFromHouse(houseId)) {
-      return this.userDAO.delete(user);
+    if (user && user.isFromHouse(houseId)) {
+      return await this.userDAO.delete(user);
     }
 
     return false;

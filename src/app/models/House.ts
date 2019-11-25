@@ -5,16 +5,18 @@ import EventManager from './EventManager';
 class House {
   private camerasStatus: boolean;
   private alarmStatus: boolean;
+  private sprinklersStatus: boolean;
   private address: string;
   private id?: string;
   private locks: Lock[];
 
   public events: EventManager;
 
-  public constructor(camerasStatus: boolean, alarmStatus: boolean, address: string, id?: string) {
+  public constructor(camerasStatus: boolean, alarmStatus: boolean, sprinklersStatus: boolean, address: string, id?: string) {
     this.id = id ? id : null;
     this.camerasStatus = camerasStatus;
     this.alarmStatus = alarmStatus;
+    this.sprinklersStatus = sprinklersStatus;
     this.address = address;
 
     this.events = new EventManager();
@@ -28,8 +30,24 @@ class House {
     return this.camerasStatus;
   }
 
+  public setCamerasStatus(status: boolean): void {
+    this.camerasStatus = status;
+  }
+
   public isAlarmON(): boolean {
     return this.alarmStatus;
+  }
+
+  public setAlarmStatus(status: boolean): void {
+    this.alarmStatus = status;
+  }
+
+  public isSprinklersON(): boolean {
+    return this.sprinklersStatus;
+  }
+
+  public setSprinklersStatus(status: boolean): void {
+    this.sprinklersStatus = status;
   }
 
   public getAddress() {
@@ -51,7 +69,7 @@ class House {
 
   public validate(): boolean {
     const minAddresLength = 6;
-    return (this.address.length > minAddresLength);
+    return (this.address && this.address.length > minAddresLength);
   }
 }
 

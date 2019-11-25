@@ -3,10 +3,12 @@ import { Sequelize, Options } from 'sequelize';
 
 import UserModel from './models/User';
 import HouseModel from './models/House';
+import LockModel from './models/Lock';
+import EletricDeviceModel from './models/EletricDevice';
 
 import databaseConfig from '../config/database';
 
-const models = [UserModel, HouseModel];
+const models = [UserModel, HouseModel, LockModel, EletricDeviceModel];
 
 class Database {
 
