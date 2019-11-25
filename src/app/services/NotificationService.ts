@@ -1,13 +1,14 @@
-
+import INotificationDAO from '../data/notification/INotificationDAO';
 import ILockDAO from '../data/lock/ILockDAO';
-import IHouseDAO from '../data/house/IHouseDAO';
 import IUserDAO from '../data/user/IUserDAO';
 
+import NotificationDAO from '../data/notification/NotificationDAO';
 import LockDAO from '../data/lock/LockDAO';
-import HouseDAO from '../data/house/HouseDAO';
 import UserDAO from '../data/user/UserDAO';
 
 import SmartDevice from '../models/SmartDevice';
+
+import User from '../models/User';
 
 import Notification from '../models/Notification';
 import NotificationType from '../models/NotificationType';
@@ -17,24 +18,19 @@ import FireNotification from '../models/FireNotification';
 
 class NotificationService {
   private lockDAO: ILockDAO;
-  private houseDAO: IHouseDAO;
   private userDAO: IUserDAO;
+  private notificationDAO: INotificationDAO;
 
-  constructor (lockDAO: ILockDAO, houseDAO: IHouseDAO, userDAO: IUserDAO) {
+  constructor (lockDAO: ILockDAO, userDAO: IUserDAO, notificationDAO: INotificationDAO) {
     this.lockDAO = lockDAO;
-    this.houseDAO = houseDAO;
     this.userDAO = userDAO;
+    this.notificationDAO = notificationDAO;
   }
 
-  public async sendNotification(type: NotificationType, houseId: string, deviceId?: string): Promise<Notification> {
+  public async getAll(userId: string): Promise<Notification[]> {
+    const notifications = this.notificationDAO.findAllNotificationsByUserId(userId);
 
-    const notification: Notification = await this.buildNotification(type, deviceId);
-
-    if (notification) {
-
-    }
-
-    return notification;
+    return notifications;
   }
 
   private async buildNotification(type: NotificationType, deviceId?: string): Promise<Notification> {
@@ -53,6 +49,41 @@ class NotificationService {
 
     return notification;
   }
+
+  public async sendNotification(type: NotificationType, houseId: string, deviceId?: string): Promise<Notification> {
+
+    const notification: Notification = await this.buildNotification(type, deviceId);
+
+    if (notification) {
+      const receiversList: User[] = await this.userDAO.findAllUsersByHouseId(houseId);
+
+      const savedNotification = await this.notificationDAO.saveForAll(notification, receiversList);
+
+      return savedNotification;
+    }
+
+    return null;
+  }
+
+  public async updateStatus(notificationId: string, userId: string, falseAlert: boolean, read: boolean): Promise<Notification> {
+    const notification = await this.notificationDAO.getNotificationById(notificationId, userId);
+
+    if (notification) {
+      if (read) {
+        notification.setAsRead();
+      }
+  
+      if (falseAlert) {
+        notification.setAsFalseAlert();
+        notification.setAsRead();
+      }
+  
+      const updated = await this.notificationDAO.completeUpdate(notification, userId);
+      return updated;
+    }
+    
+    return null
+  }  
 }
 
-export default new NotificationService(new LockDAO(), new HouseDAO(), new UserDAO());
+export default new NotificationService(new LockDAO(), new UserDAO(), new NotificationDAO());

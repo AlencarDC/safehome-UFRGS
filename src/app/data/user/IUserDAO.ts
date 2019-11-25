@@ -5,6 +5,7 @@ interface IUserDAO extends DAO<User> {
   getUserById(userId: string): Promise<User>;
   getUserByUsername(username: string): Promise<User>;
   findAllUsersByAdminId(adminId: string): Promise<User[]>;
+  findAllUsersByHouseId(houseId: string): Promise<User[]>;
 }
 
 export default IUserDAO;

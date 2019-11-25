@@ -31,6 +31,12 @@ class User extends Model {
 
   public static associate(models: any) : void {
     this.belongsTo(models.House, { targetKey: 'id', foreignKey: 'houseId'});
+    this.belongsToMany(models.Notification, { 
+      through: models.UserNotification,
+      as: 'notifications',
+      foreignKey: 'userId',
+      otherKey: 'notificationId'
+    });
   }
 }
 

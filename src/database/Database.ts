@@ -5,10 +5,12 @@ import UserModel from './models/User';
 import HouseModel from './models/House';
 import LockModel from './models/Lock';
 import EletricDeviceModel from './models/EletricDevice';
+import UserNotificationModel from './models/UserNotification';
+import NotificationModel from './models/Notification';
 
 import databaseConfig from '../config/database';
 
-const models = [UserModel, HouseModel, LockModel, EletricDeviceModel];
+const models = [UserModel, HouseModel, LockModel, EletricDeviceModel, UserNotificationModel, NotificationModel];
 
 class Database {
 

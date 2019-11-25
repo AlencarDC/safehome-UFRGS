@@ -66,13 +66,25 @@ class UserDAO implements IUserDAO {
     return UserMapper.toDomain(result);
   }
 
-  public async findAllUsersByAdminId(adminId: string): Promise<User[]> { 
-    const admin: User = await this.getUserById(adminId);
+  public async findAllUsersByAdminId(adminId: string): Promise<User[]> {
 
     const result = await UserModelSequelize.findAll({
       where: {
-        houseId: admin.getHouse(),
+        id: adminId,
         admin: { [Op.ne]: true },
+      } 
+    });
+
+    const users: User[] = result.map(user => UserMapper.toDomain(user));
+
+    return users;
+  }
+
+  public async findAllUsersByHouseId(houseId: string): Promise<User[]> { 
+
+    const result = await UserModelSequelize.findAll({
+      where: {
+        houseId: houseId,
       } 
     });
 

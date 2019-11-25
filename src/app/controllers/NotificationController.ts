@@ -1,9 +1,20 @@
 import { Request, Response } from 'express';
 
+import HouseService from '../services/HouseService';
 import NotificationService from '../services/NotificationService';
 import Notification from '../models/Notification';
 
 class NotificationController {
+  public async index(req: Request, res: Response): Promise<Response> {
+
+    const notifications: Notification[] = await NotificationService.getAll(req.params.userId);
+
+    if (notifications === null) {
+      return res.status(400).json({error: 'Unable to get any notification.'});
+    }
+
+    return res.json(notifications);
+  }
 
   public async store(req: Request, res: Response): Promise<Response> {
 
@@ -18,19 +29,18 @@ class NotificationController {
     return res.json(notification);
   }
 
-  /*public async update(req: Request, res: Response): Promise<Response> {
+  public async update(req: Request, res: Response): Promise<Response> {
 
-    const {lockId, name, status, turnOnTime, turnOffTime} = req.body;
+    const { notificationId, falseAlert, read } = req.body;
 
-    const factory = new LockFactory();
-    const lock: Lock = <Lock> await factory.update(name, status, req.houseId, turnOnTime, turnOffTime, lockId);
+    const notification: Notification = await NotificationService.updateStatus(notificationId, req.userId, falseAlert, read);
 
-    if (lock === null) {
-      return res.status(400).json({error: 'Unable to update the lock.'});
+    if (notification === null) {
+      return res.status(400).json({error: 'Unable to update the notification.'});
     }
 
-    return res.json(lock);
-  }*/
+    return res.json(notification);
+  }
 }
 
 export default NotificationController;

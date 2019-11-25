@@ -40,7 +40,13 @@ class Routes {
 
     this.router.post('/alert', this.notificationController.store);
 
+    /**
+     * LOGIN REQUIRED
+     */
     this.router.use(AuthMiddleware.auth); // A partir daqui, é necessario estar logado para acessar as rotas
+
+    this.router.get('/alert/:userId', this.notificationController.index);
+    this.router.put('/alert', this.notificationController.update);
 
     this.router.post('/locks', AuthMiddleware.checkLockPermission, this.lockController.store);
     this.router.put('/locks', AuthMiddleware.checkLockPermission, this.lockController.update);
@@ -50,7 +56,9 @@ class Routes {
     this.router.put('/eletric_devices', AuthMiddleware.checkEletricDevicePermission, this.eletricDeviceController.update);
     this.router.delete('/eletric_devices', AuthMiddleware.checkEletricDevicePermission, this.eletricDeviceController.delete);
 
-    // Admin exlusive routes
+    /**
+     * ADMIN ONLY
+     */
     this.router.use(AuthMiddleware.adminPermission);
 
     this.router.get('/users', this.usersController.index);
