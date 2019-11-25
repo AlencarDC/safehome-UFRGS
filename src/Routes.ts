@@ -7,6 +7,7 @@ import SessionController from './app/controllers/SessionController';
 import HouseController from './app/controllers/HouseController';
 import LockController from './app/controllers/LockController';
 import EletricDeviceController from './app/controllers/EletricDeviceController';
+import NotificationController from './app/controllers/NotificationController';
 
 class Routes {
   private router: any;
@@ -15,6 +16,7 @@ class Routes {
   private houseController: HouseController;
   private lockController: LockController;
   private eletricDeviceController: EletricDeviceController;
+  private notificationController: NotificationController;
   
   constructor() {
     this.router = Router();
@@ -24,6 +26,7 @@ class Routes {
     this.houseController = new HouseController();
     this.lockController = new LockController();
     this.eletricDeviceController = new EletricDeviceController();
+    this.notificationController = new NotificationController();
 
     
     this.registerRoutes();
@@ -34,6 +37,8 @@ class Routes {
     this.router.post('/session', this.sessionController.store); // sign in
 
     this.router.post('/house', this.houseController.store);  // sign up
+
+    this.router.post('/alert', this.notificationController.store);
 
     this.router.use(AuthMiddleware.auth); // A partir daqui, é necessario estar logado para acessar as rotas
 

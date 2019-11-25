@@ -30,35 +30,6 @@ class HouseService {
     return house;
   }
 
-  /*public async addLock(name: string, status: boolean, houseId: string): Promise<Lock> {
-    const newLock: Lock = new Lock(name, status, houseId);
-
-    if (newLock.validate() === false) {
-      return null;
-    }
-
-    const lock: Lock = await this.lockDAO.save(newLock);
-
-    return lock;
-  }
-
-  public async updateLock(lockId: string, name: string, status: boolean, houseId: string): Promise<Lock> {
-    const lock: Lock = await this.lockDAO.getLockById(lockId);
-
-    if (lock.isFromHouse(houseId)) {
-      lock.setStatus(status);
-      lock.setName(name);
-      
-      if (lock.validate()) {
-        const dbLock = await this.lockDAO.update(lock);
-  
-        return dbLock;
-      }
-    }
-
-    return null;
-  }*/
-
   public async onFireAlert(houseId: string): Promise<House> {
     let house: House = await this.houseDAO.getHouseById(houseId);
 
