@@ -50,6 +50,19 @@ class LockDAO implements ILockDAO {
   public async getLockById(lockId: string): Promise<Lock> {
     return await this.getById(lockId);
   }
+
+  public async findAllLocksByHouseId(houseId: string): Promise<Lock[]> { 
+
+    const result = await LockModelSequelize.findAll({
+      where: {
+        houseId: houseId,
+      } 
+    });
+
+    const locks: Lock[] = result.map(lock => LockMapper.toDomain(lock));
+
+    return locks;
+  }
 }
 
 export default LockDAO;

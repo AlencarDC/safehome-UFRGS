@@ -1,4 +1,4 @@
-import IEletricDevice from './IEletricDevice';
+import IEletricDevice from './IEletricDeviceDAO';
 import EletricDeviceMapper from './EletricDeviceMapper';
 
 import EletricDeviceModelSequelize from '../../../database/models/EletricDevice';
@@ -49,6 +49,19 @@ class EletricDeviceDAO implements IEletricDevice {
   
   public async getEletricDeviceById(eletricDeviceId: string): Promise<EletricDevice> {
     return await this.getById(eletricDeviceId);
+  }
+
+  public async findAllEletricDevicesByHouseId(houseId: string): Promise<EletricDevice[]> { 
+
+    const result = await EletricDeviceModelSequelize.findAll({
+      where: {
+        houseId: houseId,
+      } 
+    });
+
+    const eletricDevices: EletricDevice[] = result.map(eletricDevice => EletricDeviceMapper.toDomain(eletricDevice));
+
+    return eletricDevices;
   }
 }
 

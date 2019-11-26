@@ -1,5 +1,5 @@
-import User from './User';
 import Lock from './Lock';
+import EletricDevice from './EletricDevice';
 import EventManager from './EventManager';
 
 class House {
@@ -9,6 +9,7 @@ class House {
   private address: string;
   private id?: string;
   private locks: Lock[];
+  private eletricDevices: EletricDevice[];
 
   public events: EventManager;
 
@@ -58,6 +59,10 @@ class House {
     return this.locks;
   }
 
+  public setLocks(locks: Lock[]): void {
+    this.locks = locks;
+  }
+
   public addLock(lock: Lock): void {
     this.locks.push(lock);
   }
@@ -65,6 +70,23 @@ class House {
   public removeLock(lock: Lock): void {
     const index = this.locks.indexOf(lock);
     this.locks.splice(index, 1);
+  }
+
+  public getEletricDevices(): EletricDevice[] {
+    return this.eletricDevices;
+  }
+
+  public setEletricDevices(eletricDevices: EletricDevice[]): void {
+    this.eletricDevices = eletricDevices;
+  }
+
+  public addEletricDevice(eletricDevice: EletricDevice): void {
+    this.eletricDevices.push(eletricDevice);
+  }
+
+  public removeEletricDevice(eletricDevice: EletricDevice): void {
+    const index = this.eletricDevices.indexOf(eletricDevice);
+    this.eletricDevices.splice(index, 1);
   }
 
   public validate(): boolean {

@@ -3,9 +3,13 @@ import EventListener from './EventListener';
 class EventManager {
   private listeners: Map<string, EventListener[]>;
 
+  constructor () {
+    this.listeners = new Map<string, EventListener[]>();
+  }
+
   public subscribe(event: string, listener: EventListener) {
     let listeners = this.listeners.get(event);
-    if (listeners === null){
+    if (listeners == null){
       listeners = [];
     }
 
