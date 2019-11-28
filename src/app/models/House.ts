@@ -91,7 +91,7 @@ class House {
 
   public validate(): boolean {
     const minAddresLength = 6;
-    return (this.address && this.address.length > minAddresLength);
+    return (!!this.address && this.address.length > minAddresLength);
   }
 }
 

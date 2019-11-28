@@ -30,9 +30,9 @@ class User {
     const minUsernameLength = 3;
     const minNameLength = 1;
 
-    const isPasswordValid = this.password && this.password.length >= minPasswordLength;
-    const isUsernameValid = this.username && this.username.length >= minUsernameLength;
-    const isNameValid = this.name && this.name.length >= minNameLength;
+    const isPasswordValid = !!this.password && this.password.length >= minPasswordLength;
+    const isUsernameValid = !!this.username && this.username.length >= minUsernameLength;
+    const isNameValid = !!this.name && this.name.length >= minNameLength;
 
     return (isPasswordValid && isUsernameValid && isNameValid);
   }

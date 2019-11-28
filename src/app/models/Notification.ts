@@ -20,8 +20,8 @@ class Notification {
   public validate(): boolean {
     const minLength = 3;
 
-    const isTitleValid  = this.title && this.title.length > minLength;
-    const isMessageValid  = this.message && this.message.length > minLength;
+    const isTitleValid  = !!this.title && this.title.length > minLength;
+    const isMessageValid  = !!this.message && this.message.length > minLength;
 
     return isTitleValid && isMessageValid;
   }

@@ -62,7 +62,7 @@ abstract class SmartDevice {
   public validate(): boolean {
     const minNameLength = 3;
 
-    const isNameValid = this.name && this.name.length > minNameLength; 
+    const isNameValid = !!this.name && this.name.length > minNameLength; 
 
     return isNameValid;
   }
