@@ -43,7 +43,7 @@ class UserDAO implements IUserDAO {
       where: { id: user.getId() }
     });
     
-    return (updatedRows[0] > 0 ? UserMapper.toDomain(user) : null);
+    return (updatedRows[0] > 0 ? user : null);
   }
 
   public async getById(userId: string): Promise<User> {
@@ -66,13 +66,20 @@ class UserDAO implements IUserDAO {
     return UserMapper.toDomain(result);
   }
 
-  public async findAllUsersByAdminId(adminId: string): Promise<User[]> {
+  public async findAll(houseId: string):  Promise<User[]> {
+    return await this.findAllUsersByHouseId(houseId);
+  }
+
+  public async findAllUsersByAdmin(admin: User): Promise<User[]> {
 
     const result = await UserModelSequelize.findAll({
       where: {
-        id: adminId,
+        houseId: admin.getHouse(),
         admin: { [Op.ne]: true },
-      } 
+      },
+      order: [
+        ['name', 'ASC'],
+      ]
     });
 
     const users: User[] = result.map(user => UserMapper.toDomain(user));
@@ -85,7 +92,10 @@ class UserDAO implements IUserDAO {
     const result = await UserModelSequelize.findAll({
       where: {
         houseId: houseId,
-      } 
+      },
+      order: [
+        ['name', 'DESC'],
+      ]
     });
 
     const users: User[] = result.map(user => UserMapper.toDomain(user));

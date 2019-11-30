@@ -14,7 +14,7 @@ class NotificationController {
       return res.status(400).json({error: 'Unable to get any notification.'});
     }
 
-    return res.json(notifications);
+    return res.json({notifications});
   }
 
   public async store(req: Request, res: Response): Promise<Response> {
@@ -35,10 +35,12 @@ class NotificationController {
   public async update(req: Request, res: Response): Promise<Response> {
 
     const { notificationId, falseAlert, read } = req.body;
-
     const notification: Notification = await NotificationService.updateStatus(notificationId, req.userId, falseAlert, read);
     const house: House = await HouseService.getHouseByUserId(req.userId);
-    await HouseService.manageAlert(notification.getType(), house.getId(), falseAlert);
+    if (falseAlert !== undefined) {
+      await HouseService.manageAlert(notification.getType(), house.getId(), falseAlert);
+    }
+    
 
     if (notification === null) {
       return res.status(400).json({error: 'Unable to update the notification.'});

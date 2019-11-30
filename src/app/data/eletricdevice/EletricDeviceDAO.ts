@@ -51,12 +51,19 @@ class EletricDeviceDAO implements IEletricDevice {
     return await this.getById(eletricDeviceId);
   }
 
+  public async findAll(houseId: string): Promise<EletricDevice[]> {
+    return await this.findAllEletricDevicesByHouseId(houseId)
+  }
+
   public async findAllEletricDevicesByHouseId(houseId: string): Promise<EletricDevice[]> { 
 
     const result = await EletricDeviceModelSequelize.findAll({
       where: {
         houseId: houseId,
-      } 
+      },
+      order: [
+        ['name', 'ASC'],
+      ]
     });
 
     const eletricDevices: EletricDevice[] = result.map(eletricDevice => EletricDeviceMapper.toDomain(eletricDevice));

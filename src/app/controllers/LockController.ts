@@ -5,6 +5,26 @@ import Lock from '../models/Lock';
 
 class LockController {
 
+  public async index(req: Request, res: Response): Promise<Response> {
+    
+    const { id } = req.query;
+
+    let locks;
+    const factory = new LockFactory();
+
+    if (!!id && id !== undefined) {
+      locks = await factory.get(id);
+    } else {
+      locks = await factory.getAll(req.houseId);
+    }
+
+    if (locks === null) {
+      return res.status(400).json({error: 'Unable to get the locks form this house.'});
+    }
+
+    return res.json({locks});
+  }
+
   public async store(req: Request, res: Response): Promise<Response> {
 
     const { name, status, turnOnTime, turnOffTime } = req.body;
@@ -34,7 +54,7 @@ class LockController {
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
-    const {lockId} = req.body;
+    const {lockId} = req.params;
 
     const factory = new LockFactory();
     const deleted: boolean = await factory.delete(lockId);
@@ -43,7 +63,7 @@ class LockController {
       return res.status(400).json({error: 'Unable to delete the lock.'});
     }
 
-    return res.json();
+    return res.json({success: "Deleted"});
   }
 }
 

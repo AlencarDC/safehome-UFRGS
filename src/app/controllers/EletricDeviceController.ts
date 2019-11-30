@@ -5,6 +5,26 @@ import EletricDevice from '../models/EletricDevice';
 
 class EletricDeviceController {
 
+  public async index(req: Request, res: Response): Promise<Response> {
+    
+    const { id } = req.query;
+
+    let eletricDevices;
+    const factory = new EletricDeviceFactory();
+
+    if (!!id && id !== undefined) {
+      eletricDevices = await factory.get(id);
+    } else {
+      eletricDevices = await factory.getAll(req.houseId);
+    }
+
+    if (eletricDevices === null) {
+      return res.status(400).json({error: 'Unable to get the eletric devices form this house.'});
+    }
+
+    return res.json({eletricDevices});
+  }
+
   public async store(req: Request, res: Response): Promise<Response> {
 
     const { name, status, turnOnTime, turnOffTime } = req.body;
@@ -34,7 +54,7 @@ class EletricDeviceController {
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
-    const {eletricDeviceId} = req.body;
+    const { eletricDeviceId } = req.params;
 
     const factory = new EletricDeviceFactory();
     const deleted: boolean = await factory.delete(eletricDeviceId);
@@ -43,7 +63,7 @@ class EletricDeviceController {
       return res.status(400).json({error: 'Unable to delete the eletric device.'});
     }
 
-    return res.json();
+    return res.json({success: "Deleted"});
   }
 }
 

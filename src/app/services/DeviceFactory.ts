@@ -5,6 +5,22 @@ abstract class DeviceFactory {
   public abstract createDAO(): DAO<SmartDevice>;
   public abstract createDevice(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id?: string): SmartDevice;
 
+  public async get(lockId: string) {
+    const dao = this.createDAO();
+
+    const device: SmartDevice = await dao.getById(lockId);
+
+    return device;
+  }
+
+  public async getAll(houseId: string) {
+    const dao = this.createDAO();
+
+    const devices: SmartDevice[] = await dao.findAll(houseId);
+
+    return devices;
+  }
+
   public async add(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string): Promise<SmartDevice> {
     const dao = this.createDAO();
     const device: SmartDevice = this.createDevice(name, status, houseId, turnOnTime, turnOffTime);

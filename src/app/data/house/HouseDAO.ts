@@ -47,6 +47,8 @@ class HouseDAO implements IHouseDAO {
     return HouseMapper.toDomain(result);
    }
   
+  public async findAll(selector: string) { return null};
+
   public async getHouseById(houseId: string): Promise<House> {
     return await this.getById(houseId);
   }

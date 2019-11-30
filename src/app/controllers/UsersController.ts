@@ -6,13 +6,21 @@ import UsersService from '../services/UsersService';
 class UsersController {
   public async index(req: Request, res: Response): Promise<Response> {
     
-    const users: User[] = await UsersService.getUsersByAdmin(req.houseId);
+    const { id } = req.query;
+
+    let users;
+
+    if (!!id && id !== undefined) {
+      users = await UsersService.getUser(id);
+    } else {
+      users = await UsersService.getUsersByAdmin(req.userId);
+    }
 
     if (users === null) {
       return res.status(400).json({error: 'Unable to get the users form this house.'});
     }
 
-    return res.json(users);
+    return res.json({users});
   }
 
   public async store(req: Request, res: Response): Promise<Response> {
@@ -43,12 +51,12 @@ class UsersController {
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
-    const { userId } = req.body;
-
+    const { userId } = req.params;
+    
     const deleted : boolean = await UsersService.deleteUser(userId, req.houseId);
 
     if (deleted) {
-      return res.json();
+      return res.json({success: "Deleted"});
     }
 
     return res.status(400).json({ error: 'Unable to delete user.'})

@@ -24,7 +24,7 @@ class UsersService {
     const checkUser = await this.userDAO.getUserById(userId);
 
     if (checkUser.isAdmin()) {
-      const users: User[] = await this.userDAO.findAllUsersByAdminId(checkUser.getId());
+      const users: User[] = await this.userDAO.findAllUsersByAdmin(checkUser);
 
       return users;
     }
@@ -62,7 +62,7 @@ class UsersService {
 
   public async deleteUser(userId: string, houseId: string) {
     const user: User = await this.userDAO.getUserById(userId);
-
+  
     if (user && user.isFromHouse(houseId)) {
       return await this.userDAO.delete(user);
     }

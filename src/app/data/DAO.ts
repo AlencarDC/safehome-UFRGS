@@ -4,6 +4,7 @@ interface DAO<T> {
   update(t: T): Promise<T>;
   save(t: T): Promise<T>;
   getById(id: string): Promise<T>;
+  findAll(selector: string): Promise<T[]>
 }
 
 export default DAO;

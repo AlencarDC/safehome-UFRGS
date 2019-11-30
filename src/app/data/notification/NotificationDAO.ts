@@ -56,6 +56,10 @@ class NotificationDAO implements INotificationDAO {
     return notification;
   }
 
+  public async findAll(userId: string): Promise<Notification[]> { 
+    return await this.findAllNotificationsByUserId(userId); 
+  }
+
   public async getById(notificationId: string): Promise<Notification> { return null; }
   
   public async getNotificationById(notificationId: string, userId: string): Promise<Notification> {
@@ -80,6 +84,9 @@ class NotificationDAO implements INotificationDAO {
 
   public async findAllNotificationsByUserId(userId: string): Promise<Notification[]> {
     const result = await NotificationModelSequelize.findAll({
+      order: [
+        ['createdAt', 'ASC']
+      ],
       include: [{
         model: UserModelSequelize,
         as: 'users',

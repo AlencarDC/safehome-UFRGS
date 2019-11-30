@@ -45,26 +45,31 @@ class Routes {
      */
     this.router.use(AuthMiddleware.auth); // A partir daqui, é necessario estar logado para acessar as rotas
 
+    this.router.get('/house', this.houseController.index);
+
     this.router.get('/alert/:userId', this.notificationController.index);
     this.router.put('/alert', this.notificationController.update);
 
+    this.router.get('/locks', this.lockController.index);
     this.router.post('/locks', AuthMiddleware.checkLockPermission, this.lockController.store);
     this.router.put('/locks', AuthMiddleware.checkLockPermission, this.lockController.update);
-    this.router.delete('/locks', AuthMiddleware.checkLockPermission, this.lockController.delete);
+    this.router.delete('/locks/:lockId', AuthMiddleware.checkLockPermission, this.lockController.delete);
 
-    this.router.post('/eletric_devices', AuthMiddleware.checkEletricDevicePermission, this.eletricDeviceController.store);
+    this.router.get('/eletric_devices', this.eletricDeviceController.index);
+    this.router.post('/eletric_devices', AuthMiddleware.checkLockPermission, this.eletricDeviceController.store);
     this.router.put('/eletric_devices', AuthMiddleware.checkEletricDevicePermission, this.eletricDeviceController.update);
-    this.router.delete('/eletric_devices', AuthMiddleware.checkEletricDevicePermission, this.eletricDeviceController.delete);
+    this.router.delete('/eletric_devices/:eletricDeviceId', AuthMiddleware.checkEletricDevicePermission, this.eletricDeviceController.delete);
+
+    this.router.get('/users', this.usersController.index);
 
     /**
      * ADMIN ONLY
      */
     this.router.use(AuthMiddleware.adminPermission);
 
-    this.router.get('/users', this.usersController.index);
     this.router.post('/users', this.usersController.store);
     this.router.put('/users', this.usersController.update);
-    this.router.delete('/users', this.usersController.delete);
+    this.router.delete('/users/:userId', this.usersController.delete);
   }
 
   public getRoutes(): Router {
