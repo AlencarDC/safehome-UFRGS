@@ -1,11 +1,11 @@
 import DeviceFactory from './DeviceFactory';
 
-import EletricDeviceDAO from '../data/eletricdevice/EletricDeviceDAO';
-import EletricDevice from '../models/EletricDevice';
+import EletricDeviceAdapter from '../data/eletricdevice/EletricDeviceAdapter';
+import EletricDevice from '../domain/EletricDevice';
 
 class EletricDeviceFactory extends DeviceFactory {
-  public createDAO(): EletricDeviceDAO {
-    return new EletricDeviceDAO();
+  public createAdapter(): EletricDeviceAdapter {
+    return new EletricDeviceAdapter();
   }
 
   public createDevice(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id?: string): EletricDevice {

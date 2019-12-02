@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 
+import Controller from './Controller';
+
 import HouseService from '../services/HouseService';
 import NotificationService from '../services/NotificationService';
-import Notification from '../models/Notification';
-import House from '../models/House';
+import Notification from '../domain/Notification';
+import House from '../domain/House';
 
-class NotificationController {
+class NotificationController implements Controller {
   public async index(req: Request, res: Response): Promise<Response> {
 
     const notifications: Notification[] = await NotificationService.getAll(req.params.userId);
@@ -48,6 +50,8 @@ class NotificationController {
 
     return res.json(notification);
   }
+
+  public async delete(req: Request, res: Response): Promise<Response> { return res.status(404).json() }
 }
 
 export default NotificationController;

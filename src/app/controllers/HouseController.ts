@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 
-import User from '../models/User';
-import House from 'app/models/House';
+import Controller from './Controller';
+
+import User from '../domain/User';
+import House from 'app/domain/House';
 import UsersService from '../services/UsersService';
 import HouseService from '../services/HouseService';
 
-class HouseController {
+class HouseController implements Controller {
   public async index(req: Request, res:Response): Promise<Response> {
     const house: House = await HouseService.getHouseByUserId(req.userId);
 
@@ -14,6 +16,18 @@ class HouseController {
     }
 
     return res.json(house);
+  }
+
+  public async update(req: Request, res:Response): Promise<Response> {
+    const {address, time} = req.body;
+
+    const house = await HouseService.updateAddress(req.houseId, address);
+    if (!!house) {
+      await HouseService.updateDevices(req.houseId, time);
+      return res.json(house);
+    }
+
+    return res.status(400).json({error: "Unable to update"});
   }
 
   public async store(req: Request, res: Response): Promise<Response> {
@@ -35,6 +49,8 @@ class HouseController {
 
     return res.json({user, house});
   }
+
+  public async delete(req: Request, res: Response): Promise<Response> { return res.status(404).json() }
 }
 
 export default HouseController;

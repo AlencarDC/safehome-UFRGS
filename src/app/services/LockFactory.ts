@@ -1,11 +1,11 @@
 import DeviceFactory from './DeviceFactory';
 
-import LockDAO from '../data/lock/LockDAO';
-import Lock from '../models/Lock';
+import LockAdapter from '../data/lock/LockAdapter';
+import Lock from '../domain/Lock';
 
 class LockFactory extends DeviceFactory {
-  public createDAO(): LockDAO {
-    return new LockDAO();
+  public createAdapter(): LockAdapter {
+    return new LockAdapter();
   }
 
   public createDevice(name: string, status: boolean, houseId: string, turnOnTime: string, turnOffTime: string, id?: string): Lock {

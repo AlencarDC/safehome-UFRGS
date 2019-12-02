@@ -46,6 +46,7 @@ class Routes {
     this.router.use(AuthMiddleware.auth); // A partir daqui, é necessario estar logado para acessar as rotas
 
     this.router.get('/house', this.houseController.index);
+    this.router.put('/house', this.houseController.update);
 
     this.router.get('/alert/:userId', this.notificationController.index);
     this.router.put('/alert', this.notificationController.update);
@@ -61,6 +62,7 @@ class Routes {
     this.router.delete('/eletric_devices/:eletricDeviceId', AuthMiddleware.checkEletricDevicePermission, this.eletricDeviceController.delete);
 
     this.router.get('/users', this.usersController.index);
+    this.router.post('/users/token', this.usersController.setToken);
 
     /**
      * ADMIN ONLY

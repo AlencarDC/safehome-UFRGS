@@ -12,14 +12,14 @@ module.exports = {
         references: { model: "notifications", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
-        allowNull: false
+        allowNull: true
       },
       user_id: {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
-        allowNull: false
+        allowNull: true
       },
       read: {
         type: Sequelize.BOOLEAN,

@@ -1,4 +1,4 @@
-import User from '../../models/User';
+import User from '../../domain/User';
 
 class UserMapper {
   public static toDomain(raw: any): User {
@@ -6,7 +6,11 @@ class UserMapper {
       return null;
     }
 
-    return new User(raw.name, raw.username, raw.password, raw.admin, raw.houseId, raw.manageLocks, raw.manageDevices, raw.id);
+    const user = new User(raw.name, raw.username, raw.password, raw.admin, raw.houseId, raw.manageLocks, raw.manageDevices, raw.id);
+    if (!!raw.token) {
+      user.setToken(raw.token);
+    }
+    return user;
   }
 
   public static toPersistence(user: User): any {
@@ -17,7 +21,8 @@ class UserMapper {
       admin: user.isAdmin(),
       houseId: user.getHouse(),
       manageLocks: user.canManageLocks(),
-      manageDevices: user.canManageEletricDevices()
+      manageDevices: user.canManageEletricDevices(),
+      token: user.getToken(),
     }
   }
 }

@@ -1,4 +1,4 @@
-import Notification from '../../models/Notification';
+import Notification from '../../domain/Notification';
 
 class NotificationMapper {
   public static toDomain(raw: any): Notification {

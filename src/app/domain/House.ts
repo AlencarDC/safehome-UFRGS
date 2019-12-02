@@ -51,8 +51,12 @@ class House {
     this.sprinklersStatus = status;
   }
 
-  public getAddress() {
+  public getAddress(): string {
     return this.address;
+  }
+
+  public setAddress(address: string): void {
+    this.address = address;
   }
 
   public getLocks(): Lock[] {
@@ -92,6 +96,37 @@ class House {
   public validate(): boolean {
     const minAddresLength = 6;
     return (!!this.address && this.address.length > minAddresLength);
+  }
+
+  public onFireAlert(falseAlert: boolean): void {
+    this.locks.forEach(lock => this.events.subscribe("on_fire_alert", lock));
+
+    const newLockStatus: boolean = falseAlert ? true : false;
+    this.events.notify("on_fire_alert", newLockStatus);
+
+    const newSprinklerStatus: boolean = falseAlert ? false : true;
+    this.setSprinklersStatus(newSprinklerStatus);
+  }
+
+  public onInvasionDetected(falseAlert: boolean): void {
+    const newStatus: boolean = falseAlert ? false : true;
+    this.setAlarmStatus(newStatus);
+    this.setCamerasStatus(newStatus);
+  }
+
+  public onSuspiciousMovement(falseAlert: boolean): void {
+    const newStatus: boolean = falseAlert ? false : true;
+    this.setCamerasStatus(newStatus);
+  }
+
+  public updateDevices(time: string): void {
+    this.getLocks().forEach(async lock => {
+      lock.updateStatusByTime(time);
+    });
+
+    this.getEletricDevices().forEach(async eletricDevice => {
+      eletricDevice.updateStatusByTime(time);
+    });
   }
 }
 

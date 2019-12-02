@@ -1,4 +1,4 @@
-import Lock from '../../models/Lock';
+import Lock from '../../domain/Lock';
 
 class LockMapper {
   public static toDomain(raw: any): Lock {

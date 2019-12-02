@@ -1,4 +1,4 @@
-import House from '../../models/House';
+import House from '../../domain/House';
 
 class HouseMapper {
   public static toDomain(raw: any): House {

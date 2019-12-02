@@ -1,11 +1,11 @@
-import ILockDAO from './ILockDAO';
+import ILockAdapter from './ILockAdapter';
 import LockMapper from './LockMapper';
 
 import LockModelSequelize from '../../../database/models/Lock';
 
-import Lock from '../../models/Lock';
+import Lock from '../../domain/Lock';
 
-class LockDAO implements ILockDAO {
+class LockAdapter implements ILockAdapter {
 
   public async exists(lock: Lock): Promise<boolean> {;
     const result = await LockModelSequelize.findOne({
@@ -72,4 +72,4 @@ class LockDAO implements ILockDAO {
   }
 }
 
-export default LockDAO;
+export default LockAdapter;

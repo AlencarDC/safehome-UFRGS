@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 
-import EletricDeviceFactory from '../services/EletricDeviceFactory';
-import EletricDevice from '../models/EletricDevice';
+import Controller from './Controller';
 
-class EletricDeviceController {
+import EletricDeviceFactory from '../services/EletricDeviceFactory';
+import EletricDevice from '../domain/EletricDevice';
+
+class EletricDeviceController implements Controller {
 
   public async index(req: Request, res: Response): Promise<Response> {
     

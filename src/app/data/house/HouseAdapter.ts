@@ -1,12 +1,12 @@
-import IHouseDAO from './IHouseDAO';
+import IHouseAdapter from './IHouseAdapter';
 import HouseMapper from './HouseMapper';
 
 import HouseModelSequelize from '../../../database/models/House';
 import UserModelSequelize from '../../../database/models/User';
 
-import House from '../../models/House';
+import House from '../../domain/House';
 
-class HouseDAO implements IHouseDAO {
+class HouseAdapter implements IHouseAdapter {
 
   public async exists(house: House): Promise<boolean> {;
     const result = await HouseModelSequelize.findOne({
@@ -65,4 +65,4 @@ class HouseDAO implements IHouseDAO {
   }
 }
 
-export default HouseDAO;
+export default HouseAdapter;

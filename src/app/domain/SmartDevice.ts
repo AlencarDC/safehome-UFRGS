@@ -1,3 +1,5 @@
+import {isAfter, isBefore} from 'date-fns';
+
 abstract class SmartDevice {
   private id?: string;
   private name: string;
@@ -58,6 +60,31 @@ abstract class SmartDevice {
   public getTurnOffTime(): string {
     return this.turnOffTime;
   }
+
+  public updateStatusByTime(time: string): void {
+    const turnOn: Date = this.getDate(this.turnOnTime);
+    const turnOff: Date = this.getDate(this.turnOffTime);
+    const currentTime: Date = this.getDate(time);
+
+    if (isBefore(turnOff, turnOn)) {
+      turnOff.setDate(turnOff.getDate() + 1);
+    }
+
+    if (isBefore(currentTime, turnOn)) {
+      currentTime.setDate(currentTime.getDate() + 1);
+    }
+
+    if (isAfter(currentTime, turnOn) && isBefore(currentTime, turnOff)) {
+      this.turnON();
+    } else {
+      this.turnOFF();
+    }
+  }
+
+  private getDate(time: string): Date {
+    const splitted: string[] = time.split(':');
+    return new Date(1999, 3, 9, Number.parseInt(splitted[0]), Number.parseInt(splitted[1]), 0, 0);
+  } 
 
   public validate(): boolean {
     const minNameLength = 3;

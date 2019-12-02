@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 
-import LockFactory from '../services/LockFactory';
-import Lock from '../models/Lock';
+import Controller from './Controller';
 
-class LockController {
+import LockFactory from '../services/LockFactory';
+import Lock from '../domain/Lock';
+
+class LockController implements Controller {
 
   public async index(req: Request, res: Response): Promise<Response> {
     

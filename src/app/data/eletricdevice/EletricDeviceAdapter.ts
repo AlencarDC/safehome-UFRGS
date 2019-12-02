@@ -1,11 +1,11 @@
-import IEletricDevice from './IEletricDeviceDAO';
+import IEletricDevice from './IEletricDeviceAdapter';
 import EletricDeviceMapper from './EletricDeviceMapper';
 
 import EletricDeviceModelSequelize from '../../../database/models/EletricDevice';
 
-import EletricDevice from '../../models/EletricDevice';
+import EletricDevice from '../../domain/EletricDevice';
 
-class EletricDeviceDAO implements IEletricDevice {
+class EletricDeviceAdapter implements IEletricDevice {
 
   public async exists(eletricDevice: EletricDevice): Promise<boolean> {;
     const result = await EletricDeviceModelSequelize.findOne({
@@ -72,4 +72,4 @@ class EletricDeviceDAO implements IEletricDevice {
   }
 }
 
-export default EletricDeviceDAO;
+export default EletricDeviceAdapter;

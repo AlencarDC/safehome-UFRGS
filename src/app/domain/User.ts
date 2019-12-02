@@ -8,8 +8,9 @@ class User {
   private admin: boolean;
   private houseId: string;
   private permissions: Permission;
+  private token: string;
+  private notifications: Notification[];
   private id?: string;
-  //private permissions: Permission;
 
   public constructor(name: string, username: string, password: string, admin: boolean, houseId: string, locks: boolean, eletrics: boolean, userId?: string) {
     this.id = userId ? userId : null;
@@ -18,6 +19,8 @@ class User {
     this.password = password;
     this.admin = admin;
     this.houseId = houseId;
+    this.token = null;
+    this.notifications = [];
     if (admin === true) {
       this.permissions = new Permission(true, true);
     } else {
@@ -87,6 +90,22 @@ class User {
 
   public isFromHouse(houseId: string) {
     return this.houseId === houseId;
+  }
+
+  public getToken(): string {
+    return this.token;
+  }
+
+  public setToken(token: string): void {
+    this.token = token;
+  }
+
+  public getNotifications(): Notification[] {
+    return this.notifications;
+  }
+
+  public setNotifications(notifications: Notification[]): void {
+    this.notifications = notifications;
   }
 }
 

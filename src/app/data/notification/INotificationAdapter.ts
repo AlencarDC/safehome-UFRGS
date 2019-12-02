@@ -1,8 +1,8 @@
-import DAO from '../DAO';
-import Notification from '../../models/Notification';
-import User from '../../models/User';
+import Adapter from '../Adapter';
+import Notification from '../../domain/Notification';
+import User from '../../domain/User';
 
-interface INotificationDAO extends DAO<Notification> {
+interface INotificationAdapter extends Adapter<Notification> {
   getNotificationById(notificationId: string, userId: string): Promise<Notification>;
   findAllNotificationsByUserId(userId: string): Promise<Notification[]>;
   updateAsRead(notificationId: string, userId: string): Promise<boolean>;
@@ -10,4 +10,4 @@ interface INotificationDAO extends DAO<Notification> {
   saveForAll(notification: Notification, receivers: User[]): Promise<Notification>;
 }
 
-export default INotificationDAO;
+export default INotificationAdapter;

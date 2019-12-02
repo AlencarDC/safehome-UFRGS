@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 
-import User from '../models/User';
+import Controller from './Controller';
+
+import User from '../domain/User';
 import UsersService from '../services/UsersService';
 
-class UsersController {
+class UsersController implements Controller {
   public async index(req: Request, res: Response): Promise<Response> {
     
     const { id } = req.query;
@@ -60,6 +62,14 @@ class UsersController {
     }
 
     return res.status(400).json({ error: 'Unable to delete user.'})
+  }
+
+  public async setToken(req: Request, res: Response): Promise<Response>  {
+    const { token } = req.body;
+
+    const set = await UsersService.setToken(req.userId, token);
+
+    return res.json(set);
   }
 }
 

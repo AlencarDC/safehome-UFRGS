@@ -1,13 +1,13 @@
 import { Op } from 'sequelize'
 
-import IUserDAO from './IUserDAO';
+import IUserAdapter from './IUserAdapter';
 import UserMapper from './UserMapper';
 
 import UserModelSequelize from '../../../database/models/User';
 
-import User from '../../models/User';
+import User from '../../domain/User';
 
-class UserDAO implements IUserDAO {
+class UserAdapter implements IUserAdapter {
 
   public async exists(user: User): Promise<boolean> {;
     const result = await UserModelSequelize.findOne({
@@ -104,4 +104,4 @@ class UserDAO implements IUserDAO {
   }
 }
 
-export default UserDAO;
+export default UserAdapter;

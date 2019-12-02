@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import authConfig from '../../config/auth';
 import UserService from '../services/UsersService';
-import User from '../models/User';
+import User from '../domain/User';
 
 class Auth {
   public async auth(req: Request, res: Response, next: NextFunction): Promise<any> {

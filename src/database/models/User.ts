@@ -21,6 +21,7 @@ class User extends Model {
       admin: DataTypes.BOOLEAN,
       manageLocks: DataTypes.BOOLEAN,
       manageDevices: DataTypes.BOOLEAN,
+      token: DataTypes.STRING,
     },
     {
       sequelize,

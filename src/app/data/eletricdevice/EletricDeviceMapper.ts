@@ -1,4 +1,4 @@
-import EletricDevice from '../../models/EletricDevice';
+import EletricDevice from '../../domain/EletricDevice';
 
 class EletricDeviceMapper {
   public static toDomain(raw: any): EletricDevice {

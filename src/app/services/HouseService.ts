@@ -1,25 +1,25 @@
-import IHouseDAO from '../data/house/IHouseDAO';
-import HouseDAO from '../data/house/HouseDAO';
-import ILockDAO from '../data/lock/ILockDAO';
-import LockDAO from '../data/lock/LockDAO';
-import IEletricDeviceDAO from '../data/eletricdevice/IEletricDeviceDAO';
-import EletricDeviceDAO from '../data/eletricdevice/EletricDeviceDAO';
+import IHouseAdapter from '../data/house/IHouseAdapter';
+import HouseAdapter from '../data/house/HouseAdapter';
+import ILockAdapter from '../data/lock/ILockAdapter';
+import LockAdapter from '../data/lock/LockAdapter';
+import IEletricDeviceAdapter from '../data/eletricdevice/IEletricDeviceAdapter';
+import EletricDeviceAdapter from '../data/eletricdevice/EletricDeviceAdapter';
 
-import House from '../models/House'
-import Lock from '../models/Lock';
-import NotificationType from '../models/NotificationType';
+import House from '../domain/House'
+import Lock from '../domain/Lock';
+import NotificationType from '../domain/NotificationType';
 
 class HouseService {
 
-  private houseDAO : IHouseDAO;
-  private lockDAO: ILockDAO;
-  private eletricDeviceDAO: IEletricDeviceDAO
+  private houseAdapter : IHouseAdapter;
+  private lockAdapter: ILockAdapter;
+  private eletricDeviceAdapter: IEletricDeviceAdapter
 
 
-  constructor (houseDAO : IHouseDAO, lockDAO: ILockDAO, eletricDeviceDAO: IEletricDeviceDAO) {
-    this.houseDAO = houseDAO;
-    this.lockDAO = lockDAO;
-    this.eletricDeviceDAO = eletricDeviceDAO;
+  constructor (houseAdapter : IHouseAdapter, lockAdapter: ILockAdapter, eletricDeviceAdapter: IEletricDeviceAdapter) {
+    this.houseAdapter = houseAdapter;
+    this.lockAdapter = lockAdapter;
+    this.eletricDeviceAdapter = eletricDeviceAdapter;
   }
 
   public async createNewHouse(address: string): Promise<House> {
@@ -29,72 +29,63 @@ class HouseService {
       return null;
     }
 
-    const house: House = await this.houseDAO.save(newHouse);
+    const house: House = await this.houseAdapter.save(newHouse);
 
     return house;
   }
 
+  public async updateAddress(houseId: string ,address: string): Promise<House> {
+    let house: House = await this.houseAdapter.getHouseById(houseId);
+
+    if (!!house) {
+      house.setAddress(address);
+      house = await this.houseAdapter.update(house);
+
+      return house;
+    }
+
+    return null;
+  }
+
   public async getHouseByUserId(userId: string): Promise<House> {
-    const house: House = await this.houseDAO.getHouseByUserId(userId);
+    const house: House = await this.houseAdapter.getHouseByUserId(userId);
 
     return house;
   }
 
   public async manageAlert(type: NotificationType, houseId: string, falseAlert: boolean): Promise<void> {
+    let house: House = await this.houseAdapter.getHouseById(houseId);
 
     if (type === NotificationType.INVASION) {
-      this.onInvasionDetected(houseId, falseAlert);
+      house.onInvasionDetected(falseAlert);
     }
     else if (type === NotificationType.MOVEMENT) {
-      this.onSuspiciousMovement(houseId, falseAlert);
+      house.onSuspiciousMovement(falseAlert);
     }
     else if (type === NotificationType.FIRE) {
-      this.onFireAlert(houseId, falseAlert);
+      house.setLocks(await this.lockAdapter.findAllLocksByHouseId(houseId));
+      house.onFireAlert(falseAlert);
+      house.getLocks().forEach(async lock => await this.lockAdapter.update(lock));
     }
+
+    house = await this.houseAdapter.update(house);
   }
 
-  private async onFireAlert(houseId: string, falseAlert: boolean): Promise<House> {
-    let house: House = await this.houseDAO.getHouseById(houseId);
-    house.setLocks(await this.lockDAO.findAllLocksByHouseId(houseId));
+  public async updateDevices(houseId: string, time: string): Promise<void> {
+    let house: House = await this.houseAdapter.getHouseById(houseId);
+    house.setLocks(await this.lockAdapter.findAllLocksByHouseId(houseId));
+    house.setEletricDevices(await this.eletricDeviceAdapter.findAllEletricDevicesByHouseId(houseId));
 
-    const locks: Lock[] = house.getLocks();
-    locks.forEach(lock => house.events.subscribe("on_fire_alert", lock));
+    house.updateDevices(time);
 
-    const newLockStatus: boolean = falseAlert ? true : false;
-    house.events.notify("on_fire_alert", newLockStatus);
+    house.getLocks().forEach(async lock => {
+      await this.lockAdapter.update(lock);
+    });
 
-    locks.forEach(async lock => await this.lockDAO.update(lock));
-
-    const newSprinklerStatus: boolean = falseAlert ? false : true;
-    house.setSprinklersStatus(newSprinklerStatus);
-    house = await this.houseDAO.update(house);
-
-    return house;
+    house.getEletricDevices().forEach(async eletricDevice => {
+      await this.eletricDeviceAdapter.update(eletricDevice);
+    });
   }
-
-  private async onInvasionDetected(houseId: string, falseAlert: boolean): Promise<House> {
-    let house: House = await this.houseDAO.getHouseById(houseId);
-
-    const newStatus: boolean = falseAlert ? false : true;
-    house.setAlarmStatus(newStatus);
-    house.setCamerasStatus(newStatus);
-
-    house = await this.houseDAO.update(house);
-
-    return house;
-  }
-
-  private async onSuspiciousMovement(houseId: string, falseAlert: boolean): Promise<House> {
-    let house: House = await this.houseDAO.getHouseById(houseId);
-
-    const newStatus: boolean = falseAlert ? false : true;
-    house.setCamerasStatus(newStatus);
-
-    house = await this.houseDAO.update(house);
-
-    return house;
-  }
-
 }
 
-export default new HouseService(new HouseDAO(), new LockDAO(), new EletricDeviceDAO());
+export default new HouseService(new HouseAdapter(), new LockAdapter(), new EletricDeviceAdapter());

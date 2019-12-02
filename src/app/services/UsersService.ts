@@ -1,30 +1,30 @@
 import jwt from 'jsonwebtoken';
 import authConfig from '../../config/auth';
 
-import IUserDAO from '../data/user/IUserDAO';
-import UserDAO from '../data/user/UserDAO';
+import IUserAdapter from '../data/user/IUserAdapter';
+import UserAdapter from '../data/user/UserAdapter';
 
-import User from '../models/User';
+import User from '../domain/User';
 
 class UsersService {
 
-  private userDAO : IUserDAO;
+  private userAdapter : IUserAdapter;
 
-  constructor (userDAO : IUserDAO) {
-    this.userDAO = userDAO;
+  constructor (userAdapter : IUserAdapter) {
+    this.userAdapter = userAdapter;
   }
 
   public async getUser(userId: string): Promise<User> {
-    const user: User = await this.userDAO.getUserById(userId);
+    const user: User = await this.userAdapter.getUserById(userId);
 
     return user;
   }
 
   public async getUsersByAdmin(userId: string): Promise<User[]> {
-    const checkUser = await this.userDAO.getUserById(userId);
+    const checkUser = await this.userAdapter.getUserById(userId);
 
     if (checkUser.isAdmin()) {
-      const users: User[] = await this.userDAO.findAllUsersByAdmin(checkUser);
+      const users: User[] = await this.userAdapter.findAllUsersByAdmin(checkUser);
 
       return users;
     }
@@ -40,19 +40,19 @@ class UsersService {
       return null;
     }
 
-    const user = await this.userDAO.save(newUser);
+    const user = await this.userAdapter.save(newUser);
 
     return user;
   }
 
   public async updatePermissions(userId: string, houseId: string, canManageLocks: boolean, canManageEletricDevices: boolean): Promise<User> {
-    const user: User = await this.userDAO.getUserById(userId);
+    const user: User = await this.userAdapter.getUserById(userId);
 
     if (user.isFromHouse(houseId)) {
       user.setManageLocksPermission(canManageLocks);
       user.setManageEletricDevicesPermission(canManageEletricDevices);
       
-      const dbUser = await this.userDAO.update(user);
+      const dbUser = await this.userAdapter.update(user);
 
       return dbUser;
     }
@@ -61,10 +61,10 @@ class UsersService {
   }
 
   public async deleteUser(userId: string, houseId: string) {
-    const user: User = await this.userDAO.getUserById(userId);
+    const user: User = await this.userAdapter.getUserById(userId);
   
     if (user && user.isFromHouse(houseId)) {
-      return await this.userDAO.delete(user);
+      return await this.userAdapter.delete(user);
     }
 
     return false;
@@ -72,7 +72,7 @@ class UsersService {
 
   public async signIn(username: string, password: string): Promise<any> {
 
-    const user: User = await this.userDAO.getUserByUsername(username);
+    const user: User = await this.userAdapter.getUserByUsername(username);
 
     if (!user || user.checkPassword(password) === false) {
       return null;
@@ -90,6 +90,14 @@ class UsersService {
     });
 
   }
+
+  public async setToken(userId: string, token: string): Promise<boolean> {
+    const user: User = await this.userAdapter.getUserById(userId);
+    user.setToken(token);
+    const response = await this.userAdapter.update(user);
+
+    return !!response;
+  }
 }
 
-export default new UsersService(new UserDAO());
+export default new UsersService(new UserAdapter());

@@ -1,14 +1,14 @@
-import INotificationDAO from './INotificationDAO';
+import INotificationAdapter from './INotificationAdapter';
 import NotificationMapper from './NotificationMapper';
 
 import UserModelSequelize from '../../../database/models/User';
 import NotificationModelSequelize from '../../../database/models/Notification';
 import UserNotificationModelSequelize from '../../../database/models/UserNotification';
 
-import Notification from '../../models/Notification';
-import User from '../../models/User';
+import Notification from '../../domain/Notification';
+import User from '../../domain/User';
 
-class NotificationDAO implements INotificationDAO {
+class NotificationAdapter implements INotificationAdapter {
 
   public async exists(notification: Notification): Promise<boolean> {;
     const result = await NotificationModelSequelize.findOne({
@@ -85,7 +85,7 @@ class NotificationDAO implements INotificationDAO {
   public async findAllNotificationsByUserId(userId: string): Promise<Notification[]> {
     const result = await NotificationModelSequelize.findAll({
       order: [
-        ['createdAt', 'ASC']
+        ['createdAt', 'DESC']
       ],
       include: [{
         model: UserModelSequelize,
@@ -117,4 +117,4 @@ class NotificationDAO implements INotificationDAO {
   }
 }
 
-export default NotificationDAO;
+export default NotificationAdapter;

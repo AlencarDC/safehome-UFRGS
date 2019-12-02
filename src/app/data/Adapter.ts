@@ -1,4 +1,4 @@
-interface DAO<T> {
+interface Adapter<T> {
   exists(t: T): Promise<boolean>;
   delete(t: T): Promise<boolean>;
   update(t: T): Promise<T>;
@@ -7,4 +7,4 @@ interface DAO<T> {
   findAll(selector: string): Promise<T[]>
 }
 
-export default DAO;
+export default Adapter;
